@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mtm_guardian:
-    image: fmguardia/mtm_guardian:latest
+    image: fmguardia/mtm-guardian:0.3
     deploy:
       mode: global
       restart_policy:
@@ -9,18 +9,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log:/var/log:ro
-      - /etc/ufw:/etc/ufw:ro
+      - /:/hostfs:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
     environment:
-      - SUPABASE_URL=https://studio.rardevops.com
-      - SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogInNlcnZpY2Vfcm9sZSIsCiAgImlzcyI6ICJzdXBhYmFzZSIsCiAgImlhdCI6IDE3MzQ4MzY0MDAsCiAgImV4cCI6IDE4OTI2MDI4MDAKfQ.VmlSWOEpE77ZfOcQSjoP-1Ty4eWUgybz_K9AUvdsY70
+      - API_ENDPOINT=http://170.205.37.204:8081
       - DOCKER_INTERVAL=10
       - VM_INTERVAL=20
-      - MANAGE_FIREWALL=true
+      - MANAGE_FIREWALL=false
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_ETC=/hostfs/etc
+    # Mantendo network_mode: host para coleta de métricas do sistema
+    network_mode: host
+    # Adicionando privilégios para acessar os processos do host
     privileged: true
-    cap_add:
-      - NET_ADMIN
-      - SYS_ADMIN
-    network_mode: host # Permite acesso ao namespace de rede do host
-# Removido bloco networks customizado para evitar conflitos
-
-    name: network_public
+    pid: host

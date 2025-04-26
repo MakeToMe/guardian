@@ -1,6 +1,6 @@
 # MTM Guardian
 
-MTM Guardian é um serviço de observabilidade e segurança para o painel MTM, desenvolvido em Go. Ele coleta métricas do sistema e estatísticas de containers Docker, enviando-as para o Supabase para visualização no painel MTM.
+MTM Guardian é um serviço de observabilidade para o painel MTM, desenvolvido em Go. Ele coleta métricas do sistema e estatísticas de containers Docker, enviando-as para uma API configurada para visualização no painel MTM.
 
 ## Funcionalidades
 
@@ -12,7 +12,7 @@ MTM Guardian é um serviço de observabilidade e segurança para o painel MTM, d
   - Uso de CPU e memória por container
   - Estatísticas de rede (entrada/saída)
   - Número de processos
-- Envio de dados para o Supabase
+- Envio de dados para API configurada
 - Identificação automática do titular pelo IP da VM
 
 ## Estrutura do Projeto
@@ -26,7 +26,7 @@ mtm_guardian/
 │   ├── collector/          # Coleta de métricas do sistema
 │   ├── docker/             # Coleta de estatísticas do Docker
 │   ├── models/             # Estruturas de dados
-│   └── supabase/           # Cliente para comunicação com Supabase
+│   └── api/                # Cliente para comunicação com API
 ├── Dockerfile              # Configuração para build do container
 ├── go.mod                  # Dependências Go
 └── go.sum                  # Checksums das dependências
@@ -36,12 +36,11 @@ mtm_guardian/
 
 - Go 1.16 ou superior
 - Docker (para coleta de estatísticas de containers)
-- Acesso ao Supabase
+- Configuração da API
 
 ## Variáveis de Ambiente
 
-- `SUPABASE_URL`: URL do projeto Supabase
-- `SUPABASE_KEY`: Chave de API do Supabase
+- `API_ENDPOINT`: URL da API para onde as métricas serão enviadas
 
 ## Construção e Execução
 
@@ -70,8 +69,7 @@ docker build -t mtm/guardian:latest .
 # Executar o container
 docker run -d \
   --name mtm_guardian \
-  -e SUPABASE_URL="sua-url-do-supabase" \
-  -e SUPABASE_KEY="sua-chave-do-supabase" \
+  -e API_ENDPOINT="http://sua-api-endpoint.com" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   mtm/guardian:latest
 ```

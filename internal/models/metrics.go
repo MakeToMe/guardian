@@ -4,17 +4,25 @@ import "time"
 
 // SystemMetrics representa as métricas do sistema coletadas
 type SystemMetrics struct {
-	IP        string       `json:"ip"`
-	CPU       CPUMetrics   `json:"cpu"`
-	Memory    MemMetrics   `json:"memory"`
-	Disk      DiskMetrics  `json:"disk"`
-	Docker    DockerStats  `json:"docker"`
-	Timestamp time.Time    `json:"timestamp"`
+	IP        string        `json:"ip"`
+	CPU       CPUMetrics    `json:"cpu"`
+	Memory    MemMetrics    `json:"memory"`
+	Disk      DiskMetrics   `json:"disk"`
+
+	Timestamp time.Time     `json:"timestamp"`
 }
 
 // CPUMetrics representa as métricas de CPU
 type CPUMetrics struct {
-	Cores       int     `json:"cores"`
+	Cores       int           `json:"cores"`
+	UsedPercent float64       `json:"used_percent"`
+	IdlePercent float64       `json:"idle_percent"`
+	CoreStats   []CoreMetrics `json:"core_stats,omitempty"`
+}
+
+// CoreMetrics representa as métricas de um núcleo de CPU específico
+type CoreMetrics struct {
+	CoreID      int     `json:"core_id"`
 	UsedPercent float64 `json:"used_percent"`
 	IdlePercent float64 `json:"idle_percent"`
 }
@@ -36,6 +44,8 @@ type DiskMetrics struct {
 	AvailableGB float64 `json:"available_gb"`
 	FreePercent float64 `json:"free_percent"`
 }
+
+
 
 // DockerStats representa as estatísticas do Docker
 type DockerStats struct {

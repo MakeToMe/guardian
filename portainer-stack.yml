@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mtm_guardian:
-    image: fmguardia/mtm_guardian:latest
+    image: fmguardia/mtm-guardian:latest
     deploy:
       mode: global
       restart_policy:
@@ -10,14 +10,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/log:/var/log:ro
-      - /etc/ufw:/etc/ufw:ro
     environment:
-      - SUPABASE_URL=https://studio.rardevops.com
-      - SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogInNlcnZpY2Vfcm9sZSIsCiAgImlzcyI6ICJzdXBhYmFzZSIsCiAgImlhdCI6IDE3MzQ4MzY0MDAsCiAgImV4cCI6IDE4OTI2MDI4MDAKfQ.VmlSWOEpE77ZfOcQSjoP-1Ty4eWUgybz_K9AUvdsY70
+      - API_ENDPOINT=http://170.205.37.204:8081
       - DOCKER_INTERVAL=10
       - VM_INTERVAL=20
-      - MANAGE_FIREWALL=true
-    privileged: true
-    cap_add:
-      - NET_ADMIN
-      - SYS_ADMIN
+      - MANAGE_FIREWALL=false
+    # Nota: As funcionalidades de firewall foram removidas e serão implementadas
+    # em um serviço separado que rodará diretamente no sistema host
